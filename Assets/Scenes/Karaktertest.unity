@@ -133,7 +133,7 @@ GameObject:
   m_Component:
   - component: {fileID: 583223264}
   - component: {fileID: 583223263}
-  - component: {fileID: 583223262}
+  - component: {fileID: 583223265}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -141,14 +141,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!81 &583223262
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 583223261}
-  m_Enabled: 1
 --- !u!20 &583223263
 Camera:
   m_ObjectHideFlags: 0
@@ -215,6 +207,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &583223265
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 583223261}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f3d6fb3b6c40be45b8e2e3e484ec463, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  followSpeed: 2
+  offset: {x: 0, y: 0, z: -10}
 --- !u!1 &594040516
 GameObject:
   m_ObjectHideFlags: 0
@@ -519,6 +525,7 @@ GameObject:
   - component: {fileID: 1961583387}
   - component: {fileID: 1961583390}
   - component: {fileID: 1961583391}
+  - component: {fileID: 1961583393}
   - component: {fileID: 1961583392}
   m_Layer: 0
   m_Name: Player
@@ -570,7 +577,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.4, y: 0.94}
+  m_Size: {x: 0.46, y: 0.94}
   m_EdgeRadius: 0
 --- !u!212 &1961583388
 SpriteRenderer:
@@ -681,12 +688,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   walkSpeed: 10
   jumpForce: 35
+  jumpBufferFrames: 8
+  coyoteTime: 0.2
+  maxAirJumps: 1
   groundCheckPoint: {fileID: 1885482954}
   groundCheckY: 0.2
   groundCheckX: 0.5
   whatIsGround:
     serializedVersion: 2
     m_Bits: 8
+  dashSpeed: 50
+  dashTime: 0.3
+  dashCooldown: 1
 --- !u!95 &1961583392
 Animator:
   serializedVersion: 5
@@ -708,6 +721,20 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &1961583393
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1961583386}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac336368858e9ac4e93cdf32ec6a03a4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  jumping: 0
+  dashing: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
