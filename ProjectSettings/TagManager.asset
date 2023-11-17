@@ -41,3 +41,9 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Belakang
+    uniqueID: 1769675983
+    locked: 0
+  - name: Depan
+    uniqueID: 3321248513
+    locked: 0
