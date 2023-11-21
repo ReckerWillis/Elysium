@@ -5,7 +5,7 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
     [SerializeField] protected float health;
-    [SerializeField] protected float recoilLegth;
+    [SerializeField] protected float recoilLength;
     [SerializeField] protected float recoilfactor;
     [SerializeField] protected bool isRecoiling = false;
 
@@ -41,7 +41,7 @@ public class Enemy : MonoBehaviour
         }
         if (isRecoiling )
         {
-            if (recoilTimer <recoilLegth)
+            if (recoilTimer < recoilLength)
             {
                 recoilTimer += Time.deltaTime;
             }
@@ -64,9 +64,9 @@ public class Enemy : MonoBehaviour
 
 
     }
-    protected void OnTriggerStay2D(Collider2D _other)
+    protected void OnCollisionStay2D(Collision2D _other)
     {
-        if (_other.CompareTag("Player") && !Playercontroller.Instance.pState.invicible)
+        if (_other.gameObject.CompareTag("Player") && !Playercontroller.Instance.pState.invicible)
         {
             Attack();
             Playercontroller.Instance.HitStopTime(0, 5, 0.5f);
