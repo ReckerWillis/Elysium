@@ -234,10 +234,10 @@ MonoBehaviour:
   groundCheckSize: {x: 0.03, y: 0.03}
   groundLayer:
     serializedVersion: 2
-    m_Bits: 512
+    m_Bits: 0
   wallLayer:
     serializedVersion: 2
-    m_Bits: 1024
+    m_Bits: 0
   WallCheck: {fileID: 4053226310138432}
   move: {x: 0, y: 0}
   isDashing: 0
