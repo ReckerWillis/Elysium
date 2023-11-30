@@ -9,7 +9,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] protected float recoilfactor;
     [SerializeField] protected bool isRecoiling = false;
 
-    [SerializeField] protected Playercontroller player;
+    /*[SerializeField] protected Playercontroller player;*/
     [SerializeField] protected float speed;
 
 
@@ -18,23 +18,25 @@ public class Enemy : MonoBehaviour
     protected float recoilTimer;
     protected Rigidbody2D rb;
 
-
-    protected virtual void Awake()
+    protected enum EnemyStates
     {
-        rb = GetComponent<Rigidbody2D>();
-        player = Playercontroller.Instance;
+        Slime_Idle,
+        Slime_Flip
     }
+    protected EnemyStates curentEnemyState;
 
 
-    // Start is called before the first frame update
     protected virtual void Start()
     {
-        
+        rb = GetComponent<Rigidbody2D>();
+        /*player = Playercontroller.Instance;*/
     }
 
     // Update is called once per frame
     protected virtual void Update()
     {
+        UpdateEnemyStates();
+
         if(health <= 0)
         {
             Destroy(gameObject);
@@ -72,6 +74,17 @@ public class Enemy : MonoBehaviour
             Playercontroller.Instance.HitStopTime(0, 5, 0.5f);
         }
     }
+
+    protected virtual void UpdateEnemyStates()
+    {
+
+    }
+    protected void ChangeState(EnemyStates _newState)
+    {
+        curentEnemyState = _newState;
+    }
+
+
     protected virtual void Attack()
     {
         Playercontroller.Instance.TakeDamage(damage);

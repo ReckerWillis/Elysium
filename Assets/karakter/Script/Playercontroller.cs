@@ -123,8 +123,10 @@ public class Playercontroller : MonoBehaviour
 
         gravity = rb.gravityScale;
 
+        
         Mana = mana;
         manaStorage.fillAmount = Mana;
+
     }
 
     private void OnDrawGizmos()
@@ -139,8 +141,13 @@ public class Playercontroller : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (pState.cutscene) return;
+
+        Debug.Log("Position: " + transform.position);
+        Debug.Log("Grounded: " + Grounded());
         GetInputs();
         UpdateJumpVariables();
+        RestoreTimeScale();
 
         if (pState.dashing) return;
         Flip();
@@ -149,14 +156,13 @@ public class Playercontroller : MonoBehaviour
         StartDash();
         Attack();
         Heal();
-        RestoreTimeScale();
         FlashWhileInvincible();
         CastSkill();
     }
-
+    
     private void OnTriggerEnter2D(Collider2D _other)
     {
-        if (_other.GetComponent<Enemy>() != null && pState.castskill) 
+        if (_other.GetComponent<Enemy>() != null && pState.casting) 
         {
             _other.GetComponent<Enemy>().EnemyHit(skillDamage,(_other.transform.position - transform.position).normalized,-recoilYSpeed);
         }
@@ -164,8 +170,11 @@ public class Playercontroller : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (pState.cutscene) return;
+
         if (pState.dashing) return;
         Recoil();
+        Debug.Log("Velocity: " + rb.velocity);
 
     }
 
@@ -221,13 +230,36 @@ public class Playercontroller : MonoBehaviour
         pState.dashing = true;
         anim.SetTrigger("Dashing");
         rb.gravityScale = 0;
-        rb.velocity = new Vector2(transform.localScale.x * dashSpeed, 0);
+        int _dir = pState.lookingRight ? 1 : -1;
+        rb.velocity = new Vector2(_dir * dashSpeed, 0);
         yield return new WaitForSeconds(dashTime);
         rb.gravityScale = gravity;
         pState.dashing = false;
         yield return new WaitForSeconds(dashCooldown);
         canDash = true;
     }
+
+    public IEnumerator WalkIntoNewScene(Vector2 _exitDir ,float _delay)
+    {
+        //jikakeluardariatas
+        if (_exitDir.y > 0)
+        {
+            rb.velocity = jumpForce * _exitDir;
+        }
+
+        if(_exitDir.x != 0)
+        {
+            xAxis = _exitDir.x > 0 ? 2 : -2;
+
+            Move();
+        }
+
+        Flip();
+        yield return new WaitForSeconds(_delay);
+        pState.cutscene = false;
+    }
+
+
 
     void Attack()
     {
@@ -405,6 +437,22 @@ public class Playercontroller : MonoBehaviour
             restoreTime = true;
         }
     }
+
+    /*IEnumerator Death()
+    {
+        pState.alive = false;
+        Time.timeScale = 1;
+        anim.SetTrigger("Death");
+
+        yield return new WaitForSeconds(0.9f;
+    }*/
+
+
+
+
+
+
+
     IEnumerator StartTimeAgain(float _delay)
     {
         restoreTime = true;
@@ -471,7 +519,7 @@ public class Playercontroller : MonoBehaviour
     {
         if (Input.GetButtonDown("Skill") && timeSinceCast >= timeBetweenCast && Mana >= manaSpellCost)
         {
-            pState.castskill = true;
+            pState.casting = true;
             timeSinceCast = 0;
             StartCoroutine(CastCoroutine());
         }
@@ -501,7 +549,7 @@ public class Playercontroller : MonoBehaviour
             pState.recoilingX = true;
         }
 
-        else if(yAxis > 0)
+        else if (yAxis > 0)
         {
             Instantiate(upSkill, transform);
             rb.velocity = Vector2.zero;
@@ -509,7 +557,7 @@ public class Playercontroller : MonoBehaviour
         Mana -= manaSpellCost;
         yield return new WaitForSeconds(0.35f);
         anim.SetBool("Castskill", false);
-        pState.castskill = false;
+        pState.casting = false;
     }
 
 
@@ -527,29 +575,27 @@ public class Playercontroller : MonoBehaviour
         }
     }
     void Jump()
-    {
-        if (Input.GetButtonUp("Jump")&& rb.velocity.y > 0)
+    {  
+        if (jumpBufferCounter > 0 && coyoteTimeCounter > 0 && !pState.jumping)
         {
-            rb.velocity = new Vector2(rb.velocity.x,0);
+            rb.velocity = new Vector3(rb.velocity.x, jumpForce);
+
+            pState.jumping = true;
+        }
+        if (!Grounded() && airJumpCounter < maxAirJumps && Input.GetButtonDown("Jump"))
+        {
+            pState.jumping = true;
+
+            airJumpCounter++;
+
+            rb.velocity = new Vector3(rb.velocity.x, jumpForce);
+        }
+
+        if (Input.GetButtonUp("Jump") && rb.velocity.y > 0)
+        {
+            rb.velocity = new Vector2(rb.velocity.x, 0);
 
             pState.jumping = false;
-        }
-        if(!pState.jumping)
-        {
-            if (jumpBufferCounter > 0 && coyoteTimeCounter > 0)
-            {
-                rb.velocity = new Vector3(rb.velocity.x, jumpForce);
-
-                pState.jumping = true;
-            }
-            else if(!Grounded() && airJumpCounter < maxAirJumps && Input.GetButtonDown("Jump"))
-            {
-                pState.jumping = true;
-
-                airJumpCounter++;
-
-                rb.velocity = new Vector3(rb.velocity.x, jumpForce);
-            }
         }
 
         anim.SetBool("Jumping", !Grounded());
