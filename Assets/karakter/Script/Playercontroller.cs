@@ -189,12 +189,12 @@ public class Playercontroller : MonoBehaviour
     {
         if(xAxis < 0)
         {
-            transform.localScale = new Vector2(-1,transform.localScale.y);
+            transform.localScale = new Vector2(-1.5f,transform.localScale.y);
             pState.lookingRight = false;
         }
         else if(xAxis > 0)
         {
-            transform.localScale = new Vector2(1, transform.localScale.y);
+            transform.localScale = new Vector2(1.5f, transform.localScale.y);
             pState.lookingRight = true;
         }
         
