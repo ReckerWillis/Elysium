@@ -38054,14 +38054,14 @@ EdgeCollider2D:
   - {x: 63.841373, y: -2.9408126}
   - {x: 68.84667, y: -2.972181}
   - {x: 72.091156, y: -2.9074543}
-  - {x: 72.06189, y: -5.8491316}
-  - {x: 74.213425, y: -6.0201173}
-  - {x: 74.762314, y: -5.9763136}
+  - {x: 72.02645, y: -5.990889}
+  - {x: 74.31975, y: -5.984678}
+  - {x: 75.06355, y: -6.0028934}
   - {x: 81.803116, y: -5.964076}
   - {x: 89.58667, y: -5.920575}
   - {x: 97.79254, y: -5.984176}
   - {x: 99.00823, y: -6.0311203}
-  - {x: 101.844315, y: -5.8865347}
+  - {x: 101.98746, y: -5.9887757}
   - {x: 103.9486, y: -4.9035816}
   m_AdjacentStartPoint: {x: 0, y: 0}
   m_AdjacentEndPoint: {x: 0, y: 0}
@@ -38264,7 +38264,7 @@ TilemapRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 593584949
-  m_SortingLayer: 3
+  m_SortingLayer: 2
   m_SortingOrder: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
   m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
