@@ -466,6 +466,15 @@ public class Playercontroller : MonoBehaviour
 
     }
 
+    public void Respawned()
+    {
+        if(!pState.alive)
+        {
+            pState.alive = true;
+            Health = maxHealth;
+            anim.Play("MainCharIdle");
+        }
+    }
 
     IEnumerator StartTimeAgain(float _delay)
     {
@@ -544,7 +553,7 @@ public class Playercontroller : MonoBehaviour
     }
     IEnumerator CastCoroutine()
     {
-        anim.SetBool("Casting", true);
+        anim.SetBool("Castskill", true);
         yield return new WaitForSeconds(0.15f);
 
         //side
@@ -558,11 +567,11 @@ public class Playercontroller : MonoBehaviour
             }
             else
             {
-                _SlashSkill.transform.eulerAngles = new Vector2(_SlashSkill.transform.eulerAngles.x, 100);
+                _SlashSkill.transform.eulerAngles = new Vector2(_SlashSkill.transform.eulerAngles.x, 180);
             }
             pState.recoilingX = true;
         }
-
+        //skill atas
         else if (yAxis > 0)
         {
             Instantiate(upSkill, transform);

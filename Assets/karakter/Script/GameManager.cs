@@ -7,6 +7,9 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     public string transitionedFromScene;
 
+    public Vector2 platformingRespawnPoint;
+    public Vector2 respawnPoint;
+    [SerializeField] Campfire campfire;
 
     public static GameManager Instance {get; private set;}
 
@@ -21,7 +24,31 @@ public class GameManager : MonoBehaviour
             Instance = this;
         }
         DontDestroyOnLoad(gameObject);
+        campfire = FindObjectOfType<Campfire>();
     }
 
+    public void RespawnPlayer()
+    {   
+        if(campfire != null)
+        {
+            if (campfire.interacted)
+            {
+                respawnPoint = campfire.transform.position;
+            }
+            else
+            {
+                respawnPoint = platformingRespawnPoint;
+            }
+        }
+        else
+        {
+            respawnPoint = platformingRespawnPoint;
+        }
+
+        Playercontroller.Instance.transform.position = respawnPoint;
+
+        StartCoroutine(UIManager.Instance.DeadactivateDeathScreen());
+        Playercontroller.Instance.Respawned();
+    }
 
 }

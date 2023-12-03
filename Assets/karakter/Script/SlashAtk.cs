@@ -24,7 +24,7 @@ public class SlashAtk : MonoBehaviour
     {
         if (_other.tag == "Enemy")
         {
-            _other.GetComponent<Enemy>().EnemyHit(damage, (_other.transform.position).normalized, -hitForce);
+            _other.GetComponent<Enemy>().EnemyHit(damage, (_other.transform.position - transform.position).normalized, -hitForce);
         }
     }
 
