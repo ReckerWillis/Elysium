@@ -108,7 +108,7 @@ public class Playercontroller : MonoBehaviour
         {
             Instance = this;
         }
-        Health = maxHealth;
+        DontDestroyOnLoad(gameObject);
     }
 
     // Start is called before the first frame update
@@ -126,7 +126,7 @@ public class Playercontroller : MonoBehaviour
         
         Mana = mana;
         manaStorage.fillAmount = Mana;
-
+        Health = maxHealth;
     }
 
     private void OnDrawGizmos()
@@ -142,22 +142,28 @@ public class Playercontroller : MonoBehaviour
     void Update()
     {
         if (pState.cutscene) return;
-
+        if(pState.alive)
+        {
+            GetInputs();
+        }
         Debug.Log("Position: " + transform.position);
         Debug.Log("Grounded: " + Grounded());
-        GetInputs();
+        
         UpdateJumpVariables();
         RestoreTimeScale();
 
         if (pState.dashing) return;
-        Flip();
-        Move();
-        Jump();
-        StartDash();
-        Attack();
-        Heal();
+        if (pState.alive)
+        {
+            Flip();
+            Move();
+            Jump();
+            StartDash();
+            Attack();
+            Heal();
+            CastSkill();
+        }
         FlashWhileInvincible();
-        CastSkill();
     }
     
     private void OnTriggerEnter2D(Collider2D _other)
@@ -387,8 +393,19 @@ public class Playercontroller : MonoBehaviour
 
     public void TakeDamage(float _damage)
     {
-        Health -= Mathf.RoundToInt(_damage);
-        StartCoroutine(StopTakingDamage());
+        if(pState.alive)
+        {
+            Health -= Mathf.RoundToInt(_damage);
+            if(Health <= 0)
+            {
+                health = 0;
+                StartCoroutine(Death());
+            }
+            else
+            {
+                StartCoroutine(StopTakingDamage());
+            }
+        }  
     }
 
     IEnumerator StopTakingDamage()
@@ -438,19 +455,16 @@ public class Playercontroller : MonoBehaviour
         }
     }
 
-    /*IEnumerator Death()
+    IEnumerator Death()
     {
         pState.alive = false;
-        Time.timeScale = 1;
+        Time.timeScale = 1f;
         anim.SetTrigger("Death");
 
-        yield return new WaitForSeconds(0.9f;
-    }*/
+        yield return new WaitForSeconds(0.9f);
+        StartCoroutine(UIManager.Instance.ActivateDeathScreen());
 
-
-
-
-
+    }
 
 
     IEnumerator StartTimeAgain(float _delay)

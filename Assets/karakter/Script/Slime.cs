@@ -21,6 +21,15 @@ public class Slime : Enemy
     }
 
     // Update is called once per frame
+    protected override void Update()
+    {
+        base.Update();
+        if(!Playercontroller.Instance.pState.alive)
+        {
+            ChangeState(EnemyStates.Slime_Idle);
+        }
+    }
+
 
     private void OnCollisionEnter2D(Collision2D _collision)
     {
