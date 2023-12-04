@@ -84,7 +84,7 @@ public class Playercontroller : MonoBehaviour
     [SerializeField] GameObject upSkill;
     [Space(5)]
 
-
+  
     [HideInInspector]public PlayerStateList pState;
     private Rigidbody2D rb;
     private SpriteRenderer sr;
