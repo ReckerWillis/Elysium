@@ -13,7 +13,7 @@ public class TransitionScript : MonoBehaviour
 
     private void Start()
     {
-        if (transitionTo == GameManager.Instance.transitionedFromScene)
+        if (GameManager.Instance.transitionedFromScene == transitionTo)
         {
             Playercontroller.Instance.transform.position = startPoint.position;
 
