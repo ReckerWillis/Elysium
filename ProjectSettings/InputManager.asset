@@ -102,7 +102,7 @@ InputManager:
     axis: 0
     joyNum: 14
   - serializedVersion: 3
-    m_Name: Skill
+    m_Name: Casting
     descriptiveName: 
     descriptiveNegativeName: 
     negativeButton: 

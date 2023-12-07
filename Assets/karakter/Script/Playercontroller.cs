@@ -142,13 +142,14 @@ public class Playercontroller : MonoBehaviour
         Health = maxHealth;
     }
 
-    private void OnDrawGizmos()
+    //hitbox
+    /*private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireCube(SideAttackTransform.position, SideAttackArea);
         Gizmos.DrawWireCube(UpAttackTransform.position, UpAttackArea);
         Gizmos.DrawWireCube(DownAttackTransform.position, DownAttackArea);
-    }
+    }*/
 
 
     // Update is called once per frame
@@ -559,7 +560,7 @@ public class Playercontroller : MonoBehaviour
 
     void CastSkill()
     {
-        if (Input.GetButtonDown("Skill") && timeSinceCast >= timeBetweenCast && Mana >= manaSpellCost)
+        if (Input.GetButtonDown("Casting") && timeSinceCast >= timeBetweenCast && Mana >= manaSpellCost)
         {
             pState.casting = true;
             timeSinceCast = 0;
