@@ -71,6 +71,8 @@ public class Playercontroller : MonoBehaviour
     [Header("Health setting")]
     public int health;
     public int maxHealth;
+    public int maxTotalHealth = 8;
+    public int heartShards;
     [SerializeField] float hitFlashSpeed;
     public delegate void OnHealthChangedDelegate();
     [HideInInspector] public OnHealthChangedDelegate onHealthChangedCallBack;
@@ -110,6 +112,8 @@ public class Playercontroller : MonoBehaviour
     
 
     public static Playercontroller Instance;
+
+    public bool unlockedWallJump;
 
     private void Awake()
     {
@@ -175,9 +179,12 @@ public class Playercontroller : MonoBehaviour
                 Move();
                 Jump();
             }
-            
-            WallSlide();
-            WallJump();
+            if(unlockedWallJump)
+            {
+                WallSlide();
+                WallJump();
+            }
+           
             StartDash();
             Attack();
             Heal();
@@ -560,7 +567,7 @@ public class Playercontroller : MonoBehaviour
 
     void CastSkill()
     {
-        if (Input.GetButtonDown("Casting") && timeSinceCast >= timeBetweenCast && Mana >= manaSpellCost)
+        if (Input.GetButtonDown("CastSpell") && timeSinceCast >= timeBetweenCast && Mana >= manaSpellCost)
         {
             pState.casting = true;
             timeSinceCast = 0;

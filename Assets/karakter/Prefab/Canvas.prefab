@@ -255,6 +255,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sceneFader: {fileID: 0}
+  deathScreen: {fileID: 0}
 --- !u!1 &1848624776537399574
 GameObject:
   m_ObjectHideFlags: 0
