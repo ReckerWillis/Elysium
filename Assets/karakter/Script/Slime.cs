@@ -42,7 +42,13 @@ public class Slime : Enemy
 
     protected override void UpdateEnemyStates()
     {
-        switch (curentEnemyState)
+        if (health <= 0)
+        {
+            anim.SetTrigger("dead");
+            
+            Death(0.3f);
+        }
+        switch (GetCurrentEnemyState)
         {
             case EnemyStates.Slime_Idle:
                 Vector3 _ledgeCheckStart = transform.localScale.x > 0 ? new Vector3(ledgeCheckX, 0) : new Vector3(-ledgeCheckX, 0);

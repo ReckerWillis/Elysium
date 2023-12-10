@@ -17,30 +17,51 @@ public class Enemy : MonoBehaviour
 
     protected float recoilTimer;
     protected Rigidbody2D rb;
+    protected SpriteRenderer sr;
+    protected Animator anim;
 
     protected enum EnemyStates
     {
+        //slime
         Slime_Idle,
-        Slime_Flip
+        Slime_Flip,
+        
+        //bat
+        Bat_Idle,
+        Bat_Chase,
+        Bat_Stunned,
+        Bat_Death,
+
+
     }
     protected EnemyStates curentEnemyState;
 
+    protected virtual EnemyStates GetCurrentEnemyState
+    {
+        get { return curentEnemyState; }
+        set
+        {
+            if (curentEnemyState != value)
+            {
+                curentEnemyState = value;
+
+                ChangeCurrentAnimation();
+            }
+        }
+    }
 
     protected virtual void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        sr = GetComponent<SpriteRenderer>();
+        anim = GetComponent<Animator>();
         /*player = Playercontroller.Instance;*/
     }
 
     // Update is called once per frame
     protected virtual void Update()
     {
-        UpdateEnemyStates();
-
-        if(health <= 0)
-        {
-            Destroy(gameObject);
-        }
+        
         if (isRecoiling )
         {
             if (recoilTimer < recoilLength)
@@ -53,7 +74,10 @@ public class Enemy : MonoBehaviour
                 recoilTimer = 0;
             }
         }
-
+        else
+        {
+            UpdateEnemyStates();
+        }
 
     }
     public virtual void EnemyHit(float _damageDone,Vector2 _hitDirection,float _hitForce)
@@ -68,7 +92,7 @@ public class Enemy : MonoBehaviour
     }
     protected void OnCollisionStay2D(Collision2D _other)
     {
-        if (_other.gameObject.CompareTag("Player") && !Playercontroller.Instance.pState.invicible)
+        if (_other.gameObject.CompareTag("Player") && !Playercontroller.Instance.pState.invicible && health > 0)
         {
             Attack();
             if (Playercontroller.Instance.pState.alive)
@@ -79,13 +103,23 @@ public class Enemy : MonoBehaviour
         }
     }
 
+    protected virtual void Death(float _destroyTime)
+    {
+        Destroy(gameObject, _destroyTime);
+    }
+
+
     protected virtual void UpdateEnemyStates()
+    {
+
+    }
+    protected virtual void ChangeCurrentAnimation()
     {
 
     }
     protected void ChangeState(EnemyStates _newState)
     {
-        curentEnemyState = _newState;
+        GetCurrentEnemyState = _newState;
     }
 
 

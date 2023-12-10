@@ -29,8 +29,8 @@ public class Playercontroller : MonoBehaviour
     float wallJumpingDirection;
     bool isWallSliding;
     bool isWallJumping;
+    public bool unlockedWallJump;
     [Space(5)]
-
 
 
     [Header("Ground Check Setting")]
@@ -113,7 +113,7 @@ public class Playercontroller : MonoBehaviour
 
     public static Playercontroller Instance;
 
-    public bool unlockedWallJump;
+    
 
     private void Awake()
     {
@@ -181,8 +181,8 @@ public class Playercontroller : MonoBehaviour
             }
             if(unlockedWallJump)
             {
+                WallJump(); 
                 WallSlide();
-                WallJump();
             }
            
             StartDash();
@@ -304,36 +304,37 @@ public class Playercontroller : MonoBehaviour
 
             if(yAxis == 0 || yAxis < 0 && Grounded())
             {
-                Hit(SideAttackTransform, SideAttackArea, ref pState.recoilingX,recoilXSpeed);
+                int _recoilLeftOrRight = pState.lookingRight ? 1 : -1;
+
+                Hit(SideAttackTransform, SideAttackArea, ref pState.recoilingX,Vector2.right * _recoilLeftOrRight,recoilXSpeed);
                 /*Instantiate(slashEffect, SideAttackTransform);*/
             }
             else if(yAxis > 0) 
             {
-                Hit(UpAttackTransform, UpAttackArea,  ref pState.recoilingY,recoilYSpeed);
+                Hit(UpAttackTransform, UpAttackArea,  ref pState.recoilingY,Vector2.up, recoilYSpeed);
                 SlashEffectAtAngle(slashEffect,90 ,UpAttackTransform);
             }
             else if (yAxis < 0 && !Grounded())
             {
-                Hit(DownAttackTransform, DownAttackArea, ref pState.recoilingY, recoilYSpeed);
+                Hit(DownAttackTransform, DownAttackArea, ref pState.recoilingY, Vector2.down ,recoilYSpeed);
                 SlashEffectAtAngle(slashEffect, -90, DownAttackTransform);
             }
         }
     }
 
-    void Hit(Transform _attackTransform, Vector2 _attackArea, ref bool _recoilDir, float _recoilStrength)
+    void Hit(Transform _attackTransform, Vector2 _attackArea, ref bool _recoilBool,Vector2 _recoilDir, float _recoilStrength)
     {
         Collider2D[] objectsToHit = Physics2D.OverlapBoxAll(_attackTransform.position,_attackArea,0,attackableLayer);
 
         if(objectsToHit.Length > 0)
         {
-            _recoilDir = true;
+            _recoilBool = true;
         }
         for(int i = 0; i < objectsToHit.Length; i++)
         {
             if (objectsToHit[i].GetComponent<Enemy>() != null)
             {
-                objectsToHit[i].GetComponent<Enemy>().EnemyHit
-                    (damage, (transform.position - objectsToHit[i].transform.position).normalized, _recoilStrength);
+                objectsToHit[i].GetComponent<Enemy>().EnemyHit (damage, _recoilDir,  _recoilStrength);
 
                 if (objectsToHit[i].CompareTag("Enemy"))
                 {
@@ -702,6 +703,7 @@ public class Playercontroller : MonoBehaviour
         {
             isWallSliding = false;
             wallJumpingDirection = !pState.lookingRight ? 1 : -1;
+
             CancelInvoke(nameof(StopWallJumping));
             
         }
@@ -713,6 +715,7 @@ public class Playercontroller : MonoBehaviour
 
             dashed = false;
             airJumpCounter = 0;
+
             anim.SetBool("WallJump", true);
 
             if ((pState.lookingRight && transform.eulerAngles.y == 0) ||(!pState.lookingRight && transform.eulerAngles.y != 0))
