@@ -10,10 +10,10 @@ public class Enemy : MonoBehaviour
     [SerializeField] protected bool isRecoiling = false;
 
     /*[SerializeField] protected Playercontroller player;*/
-    [SerializeField] protected float speed;
+    [SerializeField] public float speed;
 
 
-    [SerializeField] protected float damage;
+    [SerializeField] public float damage;
 
     protected float recoilTimer;
     protected Rigidbody2D rb;
@@ -31,6 +31,12 @@ public class Enemy : MonoBehaviour
         Bat_Chase,
         Bat_Stunned,
         Bat_Death,
+
+        //boss
+        Demon_stage1,
+        Demon_stage2,
+        Demon_stage3,
+        Demon_stage4,
 
 
     }
@@ -90,7 +96,7 @@ public class Enemy : MonoBehaviour
 
 
     }
-    protected void OnCollisionStay2D(Collision2D _other)
+    protected virtual void OnCollisionStay2D(Collision2D _other)
     {
         if (_other.gameObject.CompareTag("Player") && !Playercontroller.Instance.pState.invicible && health > 0)
         {
