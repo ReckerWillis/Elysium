@@ -8,5 +8,9 @@ public class pindahScene : MonoBehaviour
     public void pindah (string tujuan){
         SceneManager.LoadScene(tujuan);
     }
-    
+    public void QuitButton()
+    {
+            Application.Quit();
+        Debug.Log("Tombol Keluar Telah Ditekan!");
+    }
 }
